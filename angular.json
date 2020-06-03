@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "EasySaving-Web-Application-lb"
+    }
+  },
+  "defaultProject": "EasySaving-Web-Application-lb",
+  "cli": {
+    "analytics": false
+  }
 }
