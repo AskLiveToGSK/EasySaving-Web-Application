@@ -1,27 +1,81 @@
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// API Sdk Services
-import { ApiModule } from './shared/sdk/api.module';
-import { ApiConfiguration } from './shared/sdk/api-configuration';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
-import { AppRoutingModule } from './app-routing.module';
+import { IconModule, IconSetModule, IconSetService } from '@coreui/icons-angular';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
+
+// Load Components
 import { AppComponent } from './app.component';
 
+// Project Dependencies
+import { AuthGuard } from './shared/services/auth-guard.service';
+import { AuthService } from './shared/services/auth.service';
+
+// Import Layouts
+import { GuestLayoutComponent } from './layouts';
+// import { DefaultLayoutComponent } from './containers';
+
+
+const APP_CONTAINERS = [
+  // DefaultLayoutComponent,
+  GuestLayoutComponent
+];
+
+import {
+  AppAsideModule,
+  AppBreadcrumbModule,
+  AppHeaderModule,
+  AppFooterModule,
+  AppSidebarModule,
+} from '@coreui/angular';
+
+// Import routing module
+import { AppRoutingModule } from './app.routing';
+
+// Import 3rd party components
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ChartsModule } from 'ng2-charts';
+
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    HttpClientModule,
-    ApiModule.forRoot(new ApiConfiguration ()),
-
+    AppAsideModule,
+    AppBreadcrumbModule.forRoot(),
+    AppFooterModule,
+    AppHeaderModule,
+    AppSidebarModule,
+    PerfectScrollbarModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    ChartsModule,
+    IconModule,
+    IconSetModule.forRoot(),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    ...APP_CONTAINERS
+  ],
+  providers: [
+    AuthGuard,
+    AuthService,
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
+    IconSetService,
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
